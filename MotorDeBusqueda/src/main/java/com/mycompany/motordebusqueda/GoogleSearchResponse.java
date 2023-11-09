@@ -4,14 +4,12 @@
  */
 package com.mycompany.motordebusqueda;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
-/**
- *
- * @author usuario
- */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleSearchResponse {
-   private List<GoogleSearchItem> items;
+    private List<GoogleSearchItem> items;
 
     public List<GoogleSearchItem> getItems() {
         return items;

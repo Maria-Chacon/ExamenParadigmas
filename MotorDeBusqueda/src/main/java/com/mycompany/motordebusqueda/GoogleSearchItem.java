@@ -5,10 +5,10 @@ package com.mycompany.motordebusqueda;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author usuario
- */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class GoogleSearchItem {
     private String title;
     private String link;
