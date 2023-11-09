@@ -57,22 +57,16 @@ public class MotorDeBusqueda {
             }
         });
 
-        prevPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateResults(searchField.getText(), resultsArea, pageInfoLabel);
-                }
+        prevPageButton.addActionListener((ActionEvent e) -> {
+            if (currentPage > 1) {
+                currentPage--;
+                updateResults(searchField.getText(), resultsArea, pageInfoLabel);
             }
         });
 
-        nextPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentPage++;
-                updateResults(searchField.getText(), resultsArea, pageInfoLabel);
-            }
+        nextPageButton.addActionListener((ActionEvent e) -> {
+            currentPage++;
+            updateResults(searchField.getText(), resultsArea, pageInfoLabel);
         });
 
         JPanel panel = new JPanel();
