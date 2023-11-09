@@ -10,17 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,6 +26,8 @@ public class MotorDeBusqueda {
 
     private static final String GOOGLE_API_KEY = "AIzaSyB6GKs-GXtLRyTHKvaaiB2meBOVMbKZY5E"; // Reemplaza con tu clave de API
     private static final String CUSTOM_SEARCH_ENGINE_ID = "f0ad635cb038a4099"; // Reemplaza con tu ID de motor de búsqueda
+    private static final int RESULTS_PER_PAGE = 10; // Número de resultados por página
+    private static int currentPage = 1;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
@@ -48,27 +42,45 @@ public class MotorDeBusqueda {
         JTextArea resultsArea = new JTextArea(15, 40);
         resultsArea.setEditable(false);
 
+        JButton prevPageButton = new JButton("Página anterior");
+        JButton nextPageButton = new JButton("Página siguiente");
+        JLabel pageInfoLabel = new JLabel();
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
                 if (!query.isEmpty()) {
-                    resultsArea.setText("");
-                    try {
-                        List<GoogleSearchItem> results = performGoogleSearch(query);
-                        for (GoogleSearchItem result : results) {
-                            resultsArea.append(result.getTitle() + " - " + result.getLink() + "\n");
-                        }
-                    } catch (IOException ex) {
-                        resultsArea.setText("Error en la búsqueda: " + ex.getMessage());
-                    }
+                    currentPage = 1; // Reiniciar a la primera página
+                    updateResults(query, resultsArea, pageInfoLabel);
                 }
+            }
+        });
+
+        prevPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateResults(searchField.getText(), resultsArea, pageInfoLabel);
+                }
+            }
+        });
+
+        nextPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentPage++;
+                updateResults(searchField.getText(), resultsArea, pageInfoLabel);
             }
         });
 
         JPanel panel = new JPanel();
         panel.add(searchField);
         panel.add(searchButton);
+        panel.add(prevPageButton);
+        panel.add(nextPageButton);
+        panel.add(pageInfoLabel);
 
         JScrollPane scrollPane = new JScrollPane(resultsArea);
 
@@ -81,11 +93,29 @@ public class MotorDeBusqueda {
         frame.setVisible(true);
     }
 
-    public static List<GoogleSearchItem> performGoogleSearch(String query) throws IOException {
+    private static void updateResults(String query, JTextArea resultsArea, JLabel pageInfoLabel) {
+        int start = (currentPage - 1) * RESULTS_PER_PAGE + 1;
+        try {
+            List<GoogleSearchItem> results = performGoogleSearch(query, start, RESULTS_PER_PAGE);
+            resultsArea.setText("");
+            for (GoogleSearchItem result : results) {
+                resultsArea.append(result.getTitle() + " - " + result.getLink() + "\n");
+            }
+            pageInfoLabel.setText("Página " + currentPage);
+        } catch (IOException ex) {
+            resultsArea.setText("Error en la búsqueda: " + ex.getMessage());
+        }
+    }
+
+    public static List<GoogleSearchItem> performGoogleSearch(String query, int start, int numResults) throws IOException {
         OkHttpClient httpClient = new OkHttpClient();
         String apiKey = GOOGLE_API_KEY;
         String customSearchEngineId = CUSTOM_SEARCH_ENGINE_ID;
-        String searchUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + customSearchEngineId + "&q=" + query;
+        String searchUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey
+                + "&cx=" + customSearchEngineId
+                + "&q=" + query
+                + "&start=" + start
+                + "&num=" + numResults;
 
         Request request = new Request.Builder()
                 .url(searchUrl)
