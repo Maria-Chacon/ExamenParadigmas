@@ -82,7 +82,8 @@ public class MotorDeBusqueda {
         contentPane.setLayout(new BorderLayout());
         contentPane.add(panel, BorderLayout.NORTH);
         contentPane.add(scrollPane, BorderLayout.CENTER);
-
+//        frame.setSize(900, 700);
+        frame.setMinimumSize(new Dimension(900, 700));
         frame.pack();
         frame.setVisible(true);
     }
