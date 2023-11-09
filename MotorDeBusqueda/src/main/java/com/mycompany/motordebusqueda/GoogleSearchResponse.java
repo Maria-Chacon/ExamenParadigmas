@@ -4,18 +4,20 @@
  */
 package com.mycompany.motordebusqueda;
 
+import java.util.List;
+
 /**
  *
  * @author usuario
  */
-public class BingSearchResponse {
-   private BingWebPages webPages;
+public class GoogleSearchResponse {
+   private List<GoogleSearchItem> items;
 
-    public BingWebPages getWebPages() {
-        return webPages;
+    public List<GoogleSearchItem> getItems() {
+        return items;
     }
 
-    public void setWebPages(BingWebPages webPages) {
-        this.webPages = webPages;
+    public void setItems(List<GoogleSearchItem> items) {
+        this.items = items;
     }
 }
