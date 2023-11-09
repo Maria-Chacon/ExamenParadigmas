@@ -46,14 +46,11 @@ public class MotorDeBusqueda {
         JButton nextPageButton = new JButton("Página siguiente");
         JLabel pageInfoLabel = new JLabel();
 
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String query = searchField.getText();
-                if (!query.isEmpty()) {
-                    currentPage = 1; // Reiniciar a la primera página
-                    updateResults(query, resultsArea, pageInfoLabel);
-                }
+        searchButton.addActionListener((ActionEvent e) -> {
+            String query = searchField.getText();
+            if (!query.isEmpty()) {
+                currentPage = 1; // Reiniciar a la primera página
+                updateResults(query, resultsArea, pageInfoLabel);
             }
         });
 
@@ -92,9 +89,11 @@ public class MotorDeBusqueda {
         try {
             List<GoogleSearchItem> results = performGoogleSearch(query, start, RESULTS_PER_PAGE);
             resultsArea.setText("");
-            for (GoogleSearchItem result : results) {
+
+            results.stream().forEach(result -> {
                 resultsArea.append(result.getTitle() + " - " + result.getLink() + "\n\n");
-            }
+            });
+
             pageInfoLabel.setText("Página " + currentPage);
         } catch (IOException ex) {
             resultsArea.setText("Error en la búsqueda: " + ex.getMessage());
