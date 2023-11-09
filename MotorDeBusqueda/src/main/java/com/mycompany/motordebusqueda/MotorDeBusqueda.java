@@ -99,7 +99,7 @@ public class MotorDeBusqueda {
             List<GoogleSearchItem> results = performGoogleSearch(query, start, RESULTS_PER_PAGE);
             resultsArea.setText("");
             for (GoogleSearchItem result : results) {
-                resultsArea.append(result.getTitle() + " - " + result.getLink() + "\n");
+                resultsArea.append(result.getTitle() + " - " + result.getLink() + "\n\n");
             }
             pageInfoLabel.setText("Página " + currentPage);
         } catch (IOException ex) {
