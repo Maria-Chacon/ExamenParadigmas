@@ -77,11 +77,19 @@ public class AnalisisDeDatosReddit {
     }
 
     public void visualizeResults(Map<String, Integer> keywordCounts) {
-        // Visualiza la frecuencia de palabras clave en la consola
+        // Visualiza la frecuencia de palabras clave de manera visual o tabular
         System.out.println("Keyword Frequency:");
+        System.out.println("+----------------------------+");
+        System.out.println("| Palabra clave | Frecuencia |");
+        System.out.println("+----------------------------+");
+
         for (Map.Entry<String, Integer> entry : keywordCounts.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            String keyword = entry.getKey();
+            String frequency = entry.getValue().toString();
+            System.out.printf("| %-15s | %-10s|\n", keyword, frequency);
         }
+
+        System.out.println("+----------------------------+");
     }
 
     public static void main(String[] args) {
