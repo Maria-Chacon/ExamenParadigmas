@@ -86,8 +86,24 @@ public class AnalisisDeDatosReddit {
 
     public static void main(String[] args) {
         AnalisisDeDatosReddit analyzer = new AnalisisDeDatosReddit();
-        String redditData = analyzer.getRedditData("politica");
-        Map<String, Integer> keywordCounts = analyzer.countKeywords(redditData, new String[]{"política", "elecciones", "gobierno", "partido"});
-        analyzer.visualizeResults(keywordCounts);
+        int tiempoEspera = 2000; // 2 segundos
+
+        while (true) {
+            String redditData = analyzer.getRedditData("politics");
+
+            // Verifica si la respuesta es diferente a "Too Many Requests" (código de error 429)
+            if (redditData != null && !redditData.contains("Too Many Requests")) {
+                Map<String, Integer> keywordCounts = analyzer.countKeywords(redditData, new String[]{"politics", "government", "president", "country"});
+                analyzer.visualizeResults(keywordCounts);
+                break; // Detiene el bucle
+            } else {
+                System.out.println("Límite de solicitudes alcanzado o se produjo un error al obtener los datos. Esperando " + (tiempoEspera / 1000) + " segundos antes de reintentar.");
+                try {
+                    Thread.sleep(tiempoEspera);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
