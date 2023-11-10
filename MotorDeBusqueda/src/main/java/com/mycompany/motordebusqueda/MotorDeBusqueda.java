@@ -18,22 +18,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- *
- * @author usuario
- */
+
 public class MotorDeBusqueda {
 
-    private static final String GOOGLE_API_KEY = "AIzaSyB6GKs-GXtLRyTHKvaaiB2meBOVMbKZY5E"; // Reemplaza con tu clave de API
-    private static final String CUSTOM_SEARCH_ENGINE_ID = "f0ad635cb038a4099"; // Reemplaza con tu ID de motor de búsqueda
-    private static final int RESULTS_PER_PAGE = 10; // Número de resultados por página
+    private static final String GOOGLE_API_KEY = "AIzaSyB6GKs-GXtLRyTHKvaaiB2meBOVMbKZY5E"; 
+    private static final String CUSTOM_SEARCH_ENGINE_ID = "f0ad635cb038a4099"; 
+    private static final int RESULTS_PER_PAGE = 10; 
     private static int currentPage = 1;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
+        SwingUtilities.invokeLater(() -> showSearchEngine());
     }
 
-    private static void createAndShowGUI() {
+    private static void showSearchEngine() {
         JFrame frame = new JFrame("Motor de Búsqueda de Google");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -42,19 +39,19 @@ public class MotorDeBusqueda {
         JTextArea resultsArea = new JTextArea(15, 40);
         resultsArea.setEditable(false);
 
-        JButton prevPageButton = new JButton("Página anterior");
+        JButton previousPageButton = new JButton("Página anterior");
         JButton nextPageButton = new JButton("Página siguiente");
         JLabel pageInfoLabel = new JLabel();
 
         searchButton.addActionListener((ActionEvent e) -> {
             String query = searchField.getText();
             if (!query.isEmpty()) {
-                currentPage = 1; // Reiniciar a la primera página
+                currentPage = 1; 
                 updateResults(query, resultsArea, pageInfoLabel);
             }
         });
 
-        prevPageButton.addActionListener((ActionEvent e) -> {
+        previousPageButton.addActionListener((ActionEvent e) -> {
             if (currentPage > 1) {
                 currentPage--;
                 updateResults(searchField.getText(), resultsArea, pageInfoLabel);
@@ -69,7 +66,7 @@ public class MotorDeBusqueda {
         JPanel panel = new JPanel();
         panel.add(searchField);
         panel.add(searchButton);
-        panel.add(prevPageButton);
+        panel.add(previousPageButton);
         panel.add(nextPageButton);
         panel.add(pageInfoLabel);
 
@@ -79,7 +76,6 @@ public class MotorDeBusqueda {
         contentPane.setLayout(new BorderLayout());
         contentPane.add(panel, BorderLayout.NORTH);
         contentPane.add(scrollPane, BorderLayout.CENTER);
-//        frame.setSize(900, 700);
         frame.setMinimumSize(new Dimension(900, 700));
         frame.pack();
         frame.setVisible(true);

@@ -4,15 +4,14 @@ package com.mycompany.motordebusqueda;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class GoogleSearchItem {
+
     private String title;
     private String link;
-    // Otras propiedades relevantes de los resultados de búsqueda
 
     public String getTitle() {
         return title;

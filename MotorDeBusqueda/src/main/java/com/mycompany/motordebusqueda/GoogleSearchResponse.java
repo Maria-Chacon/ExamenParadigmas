@@ -9,6 +9,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleSearchResponse {
+
     private List<GoogleSearchItem> items;
 
     public List<GoogleSearchItem> getItems() {
