@@ -21,7 +21,7 @@ import java.util.Properties;
 public class AnalisisDeDatosReddit {
 
     private final CloseableHttpClient httpClient;
-    private final String apiUrl = "https://www.reddit.com/r/";
+    private final String apiUrl = "https://www.reddit.com/r/{subreddit}/.json";
 
     public AnalisisDeDatosReddit() {
         this.httpClient = HttpClients.createDefault();
@@ -32,7 +32,7 @@ public class AnalisisDeDatosReddit {
             System.out.println("Realizando solicitud HTTP a la API de Reddit para el tema: " + topic);
 
             // Realiza la solicitud HTTP a la API de Reddit para obtener datos sobre el tema especificado.
-            HttpGet request = new HttpGet(apiUrl + "subreddit/" + topic);
+            HttpGet request = new HttpGet(apiUrl.replace("{subreddit}", topic));
             CloseableHttpResponse response = httpClient.execute(request);
 
             System.out.println("Solicitud HTTP completada");
@@ -42,6 +42,9 @@ public class AnalisisDeDatosReddit {
             response.close();
 
             System.out.println("Respuesta JSON obtenida");
+
+            // Imprime la respuesta JSON
+            System.out.println("Respuesta JSON: " + responseJson);
 
             // Procesa la respuesta JSON y devuelve los datos.
             return responseJson;
@@ -73,45 +76,18 @@ public class AnalisisDeDatosReddit {
         return keywordCounts;
     }
 
-//    public String analyzeSentiment(String text) {
-//        // Configura las propiedades para el análisis de sentimiento
-//        Properties props = new Properties();
-//        props.setProperty("annotators", "tokenize, ssplit, parse, sentiment");
-//
-//        // Crea un objeto StanfordCoreNLP con las propiedades
-//        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-//
-//        // Crea una anotación con el texto a analizar
-//        Annotation annotation = new Annotation(text);
-//
-//        // Procesa la anotación para realizar el análisis de sentimiento
-//        pipeline.annotate(annotation);
-//
-//        // Obtiene el resultado del análisis de sentimiento
-//        for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-//            String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-//            return sentiment;
-//        }
-//
-//        // Si no se pudo determinar el sentimiento, puedes retornar un valor por defecto
-//        return "Neutral";
-//    }
     public void visualizeResults(Map<String, Integer> keywordCounts) {
         // Visualiza la frecuencia de palabras clave en la consola
         System.out.println("Keyword Frequency:");
         for (Map.Entry<String, Integer> entry : keywordCounts.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
-
-        // Muestra el análisis de sentimiento en la consola
-//        System.out.println("\nSentiment Analysis: " + sentimentAnalysis);
     }
 
     public static void main(String[] args) {
         AnalisisDeDatosReddit analyzer = new AnalisisDeDatosReddit();
         String redditData = analyzer.getRedditData("politica");
         Map<String, Integer> keywordCounts = analyzer.countKeywords(redditData, new String[]{"política", "elecciones", "gobierno", "partido"});
-//        String sentimentAnalysis = analyzer.analyzeSentiment(redditData);
         analyzer.visualizeResults(keywordCounts);
     }
 }
