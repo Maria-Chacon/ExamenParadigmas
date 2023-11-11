@@ -66,7 +66,6 @@ generar_horario_completo :-
     dia(Dia),
     horario(Horario, _),
     horario_asignatura(Asignatura, Dia, Horario),
-    nl,
-    fail.
+    nl.
     
 generar_horario_completo.
